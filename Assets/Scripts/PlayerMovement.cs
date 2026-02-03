@@ -217,4 +217,6 @@ public class Player : MonoBehaviour
         if (!value)
             StopFootstep();
     }
+    Console.Log("Player movement script loaded successfully.");
+
 }
