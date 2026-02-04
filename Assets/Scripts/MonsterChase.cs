@@ -6,15 +6,18 @@ public class MonsterChase : MonoBehaviour
     public float chaseDistance = 5f;
     public float speed = 2f;
 
+    [Header("Audio")]
+    public float fadeSpeed = 2f; // makin besar = makin cepat hilang
+
     AudioSource screamAudio;
     bool isChasing = false;
 
     void Start()
     {
         screamAudio = GetComponent<AudioSource>();
-        screamAudio.loop = true;          // biar ambience ngejar
+        screamAudio.loop = true;
         screamAudio.playOnAwake = false;
-        screamAudio.volume = 0f;          // mulai dari senyap
+        screamAudio.volume = 0f;
     }
 
     void Update()
@@ -27,7 +30,7 @@ public class MonsterChase : MonoBehaviour
         }
         else
         {
-            StopChase();
+            FadeOutSound();
         }
     }
 
@@ -40,29 +43,38 @@ public class MonsterChase : MonoBehaviour
             speed * Time.deltaTime
         );
 
-        // play sound cuma SEKALI pas mulai ngejar
         if (!isChasing)
         {
             isChasing = true;
             screamAudio.Play();
         }
 
-        // volume makin keras saat makin dekat
+        // volume makin dekat makin keras
         float targetVolume = 1f - (distance / chaseDistance);
         screamAudio.volume = Mathf.Lerp(
             screamAudio.volume,
             targetVolume,
-            Time.deltaTime * 3f   // smooth speed
+            Time.deltaTime * 4f
         );
     }
 
-    void StopChase()
+    void FadeOutSound()
     {
-        if (isChasing)
+        if (!isChasing) return;
+
+        // turunin volume pelan
+        screamAudio.volume = Mathf.Lerp(
+            screamAudio.volume,
+            0f,
+            Time.deltaTime * fadeSpeed
+        );
+
+        // kalo udah hampir senyap → stop
+        if (screamAudio.volume <= 0.01f)
         {
-            isChasing = false;
             screamAudio.Stop();
             screamAudio.volume = 0f;
+            isChasing = false;
         }
     }
 }

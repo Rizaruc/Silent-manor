@@ -2,24 +2,43 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target; // Player yang akan diikuti
-    public float smoothSpeed = 0.125f; // Semakin kecil nilainya, semakin halus
-    public Vector3 offset; // Jarak antara kamera dan player
+    [Header("Follow")]
+    public Transform target;              // Player
+    public float smoothSpeed = 0.125f;
+    public Vector3 offset;
+
+    [Header("Shake (saat dikejar monster)")]
+    public MonsterFollowSmart monster;    // drag Monster ke sini
+    public float shakeStrength = 0.05f;   // seberapa brutal getarnya
+    public float shakeSpeed = 20f;        // seberapa cepat getarnya
 
     void LateUpdate()
     {
         if (target == null)
             return;
 
-        // Posisi kamera yang diinginkan
+        // ======================
+        // FOLLOW NORMAL
+        // ======================
         Vector3 desiredPosition = target.position + offset;
+        Vector3 smoothedPosition =
+            Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
 
-        // Gerakan halus (lerp)
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+        // ======================
+        // SHAKE SAAT MONSTER NGEJAR
+        // ======================
+        if (monster != null && monster.IsChasing())
+        {
+            float x = Mathf.PerlinNoise(Time.time * shakeSpeed, 0f) - 0.5f;
+            float y = Mathf.PerlinNoise(0f, Time.time * shakeSpeed) - 0.5f;
+
+            Vector3 shakeOffset = new Vector3(x, y, 0f) * shakeStrength;
+            smoothedPosition += shakeOffset;
+        }
 
         transform.position = smoothedPosition;
 
-        // Kunci rotasi kamera agar tidak miring
+        // kunci rotasi
         transform.rotation = Quaternion.identity;
     }
 }
