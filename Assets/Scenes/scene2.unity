@@ -1145,7 +1145,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 18546c7aeecb8b54c95b930164b424a7, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 18546c7aeecb8b54c95b930164b424a7, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -1381,6 +1381,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2375,6 +2376,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3226,7 +3228,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3406039060951565433, guid: 84754cf2858a1fe45ab2c0a81036dfd7, type: 3}
+  m_Sprite: {fileID: 5649591269571068165, guid: 7e6da7fc5152a87409012a12d9d44de4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3608,7 +3610,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: de4a4349a3e18e442b62cfb2a31cebc3, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: de4a4349a3e18e442b62cfb2a31cebc3, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -4560,7 +4562,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 0de6c771a8930074cb9cc8958ca9497c, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 0de6c771a8930074cb9cc8958ca9497c, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.149

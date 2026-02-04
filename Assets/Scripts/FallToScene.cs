@@ -1,29 +1,34 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using System.Collections;
 
 public class FallToNextScene : MonoBehaviour
 {
-    public Image fadeImage;
+    public SpriteRenderer fadeSprite;   // ← sprite hitam
     public float fadeDuration = 1.5f;
+    public float blackScreenHold = 0.5f;
     public string nextSceneName;
 
-    bool triggered = false;
+    private bool triggered = false;
 
-    private void Start()
+    void Start()
     {
         // Pastikan mulai transparan
-        Color c = fadeImage.color;
+        Color c = fadeSprite.color;
         c.a = 0f;
-        fadeImage.color = c;
+        fadeSprite.color = c;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !triggered)
+        if (!triggered && other.CompareTag("Player"))
         {
             triggered = true;
+
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+                player.SetCanMove(false);
+
             StartCoroutine(FadeAndLoad());
         }
     }
@@ -31,15 +36,19 @@ public class FallToNextScene : MonoBehaviour
     IEnumerator FadeAndLoad()
     {
         float t = 0f;
-        Color c = fadeImage.color;
+        Color c = fadeSprite.color;
 
+        // Fade in ke hitam total
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
             c.a = Mathf.Lerp(0f, 1f, t / fadeDuration);
-            fadeImage.color = c;
+            fadeSprite.color = c;
             yield return null;
         }
+
+        // Tahan hitam
+        yield return new WaitForSeconds(blackScreenHold);
 
         SceneManager.LoadScene(nextSceneName);
     }
