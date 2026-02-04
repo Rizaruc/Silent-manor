@@ -14,24 +14,17 @@ public class PlayerDeath : MonoBehaviour
     {
         if (isDead) return;
 
+        // HANYA JIKA NUBRUK MONSTER
         if (!collision.gameObject.CompareTag("Monster"))
             return;
 
         isDead = true;
 
-        // 🔇 MATIKAN BGM
-        if (BGMManager.Instance != null)
-        {
-            BGMManager.Instance.MuteBGMInstant();
-            // atau:
-            // BGMManager.Instance.FadeOutBGM(0.3f);
-        }
-
-        // Tampilkan jumpscare
+        // tampilkan jumpscare
         if (jumpscareUI != null)
             jumpscareUI.SetActive(true);
 
-        // 🔊 Play jumpscare sound (TETAP ADA)
+        // mainkan suara teriak
         if (jumpscareAudio != null)
             jumpscareAudio.Play();
 
@@ -42,4 +35,5 @@ public class PlayerDeath : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    //Ruslan Abdul 
 }
