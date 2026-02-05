@@ -818,6 +818,7 @@ MonoBehaviour:
   targetDoor: {fileID: 860004874}
   screenFader: {fileID: 1136165242}
   fadeDuration: 0.2
+  doorSound: {fileID: 8300000, guid: f98813c5ef047f84baa168e5402176d5, type: 3}
 --- !u!61 &398784065
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2093,7 +2094,7 @@ MonoBehaviour:
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -2656,6 +2657,7 @@ MonoBehaviour:
   targetDoor: {fileID: 1307199148}
   screenFader: {fileID: 1136165242}
   fadeDuration: 1
+  doorSound: {fileID: 8300000, guid: f98813c5ef047f84baa168e5402176d5, type: 3}
 --- !u!114 &712694542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2832,6 +2834,7 @@ MonoBehaviour:
   targetDoor: {fileID: 398784067}
   screenFader: {fileID: 1136165242}
   fadeDuration: 1
+  doorSound: {fileID: 8300000, guid: f98813c5ef047f84baa168e5402176d5, type: 3}
 --- !u!61 &860004876
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4149,6 +4152,7 @@ MonoBehaviour:
   targetDoor: {fileID: 712694538}
   screenFader: {fileID: 1136165242}
   fadeDuration: 1
+  doorSound: {fileID: 8300000, guid: f98813c5ef047f84baa168e5402176d5, type: 3}
 --- !u!114 &1307199152
 MonoBehaviour:
   m_ObjectHideFlags: 0
