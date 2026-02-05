@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public float walkSpeed = 2f;
     public float sprintSpeed = 5f;
     public float jumpForce = 10f;
+    public float movementSmooth = 10f; // 🔥 smoothing factor
 
     [Header("Ground Check Settings")]
     public Transform groundCheck;
@@ -33,15 +34,17 @@ public class Player : MonoBehaviour
     public AudioClip footstepSound;
     public AudioClip jumpSound;
 
-    private float currentStamina;
-    private bool isGrounded;
-    private bool isSprinting;
-    private bool facingRight = true;
+    float currentStamina;
+    bool isGrounded;
+    bool isSprinting;
+    bool facingRight = true;
 
-    private Rigidbody2D rb;
-    private Animator animator;
+    Rigidbody2D rb;
+    Animator animator;
 
-    // Dipakai oleh DialogManager
+    float moveInput;          // ⬅ disimpan untuk FixedUpdate
+    Vector2 targetVelocity;   // ⬅ velocity tujuan
+
     public bool canMove = true;
 
     void Awake()
@@ -70,6 +73,9 @@ public class Player : MonoBehaviour
         }
     }
 
+    // =========================
+    // INPUT & LOGIC
+    // =========================
     void Update()
     {
         CheckGround();
@@ -77,21 +83,37 @@ public class Player : MonoBehaviour
         if (!canMove)
         {
             StopFootstep();
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            moveInput = 0f;
             animator.Play(isGrounded ? "Player_Idle" : "Player_Fall");
             return;
         }
 
-        float moveInput = Input.GetAxisRaw("Horizontal");
+        moveInput = Input.GetAxisRaw("Horizontal");
 
         HandleSprint(moveInput);
-        MovePlayer(moveInput);
         HandleJump();
         HandleFlip(moveInput);
         UpdateAnimations(moveInput);
         RegenerateStamina();
         UpdateStaminaUI();
         HandleFootstep(moveInput);
+    }
+
+    // =========================
+    // PHYSICS (MULUS)
+    // =========================
+    void FixedUpdate()
+    {
+        float speed = isSprinting ? sprintSpeed : walkSpeed;
+
+        targetVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
+
+        // 🔥 SMOOTH MOVEMENT
+        rb.linearVelocity = Vector2.Lerp(
+            rb.linearVelocity,
+            targetVelocity,
+            movementSmooth * Time.fixedDeltaTime
+        );
     }
 
     void CheckGround()
@@ -103,17 +125,10 @@ public class Player : MonoBehaviour
         );
     }
 
-    void MovePlayer(float moveInput)
-    {
-        float speed = isSprinting ? sprintSpeed : walkSpeed;
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
-    }
-
     void HandleJump()
     {
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            StopFootstep();
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             PlayJumpSound();
         }
@@ -127,12 +142,13 @@ public class Player : MonoBehaviour
         {
             isSprinting = true;
             currentStamina -= staminaDrainRate * Time.deltaTime;
-            currentStamina = Mathf.Max(currentStamina, 0f);
         }
         else
         {
             isSprinting = false;
         }
+
+        currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
     }
 
     void RegenerateStamina()
@@ -140,7 +156,6 @@ public class Player : MonoBehaviour
         if (!isSprinting && currentStamina < maxStamina)
         {
             currentStamina += staminaRegenRate * Time.deltaTime;
-            currentStamina = Mathf.Min(currentStamina, maxStamina);
         }
     }
 
@@ -170,6 +185,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // ⚠️ ANIMASI TIDAK DIUBAH
     void UpdateAnimations(float moveInput)
     {
         if (isGrounded)
@@ -209,12 +225,9 @@ public class Player : MonoBehaviour
             audioSource.PlayOneShot(jumpSound);
     }
 
-    // Dipanggil DialogManager
     public void SetCanMove(bool value)
     {
         canMove = value;
-
-        if (!value)
-            StopFootstep();
+        if (!value) StopFootstep();
     }
 }

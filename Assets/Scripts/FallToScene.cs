@@ -5,9 +5,9 @@ using System.Collections;
 public class FallToNextScene : MonoBehaviour
 {
     public SpriteRenderer fadeSprite;   // ← sprite hitam
-    public float fadeDuration = 1.5f;
-    public float blackScreenHold = 0.5f;
-    public string nextSceneName;
+    private float fadeDuration = 0.1f;
+    private float blackScreenHold = 0.3f;
+    private string nextSceneName = "Scene2"; // ganti sesuai nama scene tujuan
 
     private bool triggered = false;
 
