@@ -4,9 +4,16 @@ public class EyeFollowPlayer : MonoBehaviour
 {
     public Transform pupil;
     public Transform player;
-    public float maxRadius = 0.1f;
+
+    [Header("Batas Gerak Pupil")]
+    public float maxX = 0.12f;
+    public float maxY = 0.08f;
+
+    [Header("Kehalusan Gerakan")]
+    public float smoothSpeed = 8f; // makin kecil = makin lambat
 
     private Vector3 initialLocalPos;
+    private Vector3 currentVelocity;
 
     void Start()
     {
@@ -17,28 +24,24 @@ public class EyeFollowPlayer : MonoBehaviour
     {
         if (!pupil || !player) return;
 
-        // arah dunia dari mata ke player
-        Vector3 worldDir = player.position - transform.position;
+        // posisi player di local space mata
+        Vector3 localTarget = transform.InverseTransformPoint(player.position);
 
-        // konversi ke local space mata
-        Vector3 localDir = transform.InverseTransformDirection(worldDir);
+        // offset relatif dari posisi awal pupil
+        Vector3 offset = localTarget - initialLocalPos;
 
-        // buang Z (2D)
-        localDir.z = 0f;
+        // clamp agar tetap di dalam bola mata
+        offset.x = Mathf.Clamp(offset.x, -maxX, maxX);
+        offset.y = Mathf.Clamp(offset.y, -maxY, maxY);
+        offset.z = 0f;
 
-        // normalisasi arah (yang penting ARAH, bukan jarak)
-        localDir = localDir.normalized;
+        Vector3 targetPos = initialLocalPos + offset;
 
-        // kalikan radius
-        Vector3 offset = localDir * maxRadius;
-
-        // apply
-        pupil.localPosition = initialLocalPos + offset;
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, maxRadius);
+        // SMOOTH FOLLOW
+        pupil.localPosition = Vector3.Lerp(
+            pupil.localPosition,
+            targetPos,
+            Time.deltaTime * smoothSpeed
+        );
     }
 }
