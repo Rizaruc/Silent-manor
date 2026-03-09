@@ -3671,7 +3671,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-<<<<<<< HEAD
+
 --- !u!1 &870266182
 GameObject:
   m_ObjectHideFlags: 0
@@ -3716,8 +3716,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-=======
->>>>>>> 8833c4911efa7494485f5ebf07c9616582ff21f0
+
 --- !u!1 &886404552
 GameObject:
   m_ObjectHideFlags: 0
