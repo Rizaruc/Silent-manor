@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class DoorTeleporter : MonoBehaviour
 {
     [Tooltip("Target transform to teleport the player to (set another door's transform).")]
@@ -12,9 +13,19 @@ public class DoorTeleporter : MonoBehaviour
     [Tooltip("Durasi fade (detik)")]
     public float fadeDuration = 0.25f;
 
+    [Header("Audio")]
+    public AudioClip doorSound; // 🔊 suara pintu (masuk & keluar sama)
+
     private bool playerInRange = false;
     private GameObject playerObject;
     private Rigidbody2D playerRb;
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -40,6 +51,7 @@ public class DoorTeleporter : MonoBehaviour
     {
         if (playerInRange && playerObject != null && Input.GetKeyDown(KeyCode.E))
         {
+            PlayDoorSound();              // 🔊 tambahan audio interact
             StartCoroutine(TeleportWithFade());
         }
     }
@@ -71,6 +83,14 @@ public class DoorTeleporter : MonoBehaviour
         playerObject.transform.position = newPos;
 
         Debug.Log($"Teleported to: {targetDoor.name}");
+    }
+
+    void PlayDoorSound()
+    {
+        if (doorSound != null)
+        {
+            audioSource.PlayOneShot(doorSound);
+        }
     }
 
     void OnDrawGizmosSelected()
